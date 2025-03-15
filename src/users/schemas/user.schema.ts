@@ -3,19 +3,28 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({
+  timestamps: true,
+  toJSON: {
+    transform: (_, ret) => {
+      delete ret.password;
+      return ret;
+    },
+  },
+})
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   username: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true })
   password: string;
-
-  @Prop({ default: Date.now })
-  createdAt: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User); 
+export const UserSchema = SchemaFactory.createForClass(User);
+
+// Add compound index for both username and email
+UserSchema.index({ username: 1 }, { unique: true });
+UserSchema.index({ email: 1 }, { unique: true }); 

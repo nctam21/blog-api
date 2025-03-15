@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from './schemas/post.schema';
-import { UsersModule } from 'src/users/users.module';
+import { UsersModule } from '../users/users.module';
 import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
 
