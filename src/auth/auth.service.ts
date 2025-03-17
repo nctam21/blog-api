@@ -36,10 +36,12 @@ export class AuthService {
       this.logger.debug(`Login attempt for user: ${username}`);
       const user = await this.validateUser(username, password);
       const payload = { username: user.username, sub: user._id };
-      const token = this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+      const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
       this.logger.debug(`Login successful for user: ${username}`);
       return {
-        access_token: token,
+        access_token: accessToken,
+        refresh_token: refreshToken,
         user: {
           id: user._id,
           username: user.username,
@@ -54,4 +56,4 @@ export class AuthService {
       throw new UnauthorizedException('Login failed');
     }
   }
-}
+} 
